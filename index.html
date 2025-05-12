@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitQuest 雙人挑戰賽</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div id="login-screen" class="screen active">
+            <h1>FitQuest 雙人挑戰賽</h1>
+            <div class="login-options">
+                <button id="login-joel" class="login-btn">我是 Joel</button>
+                <button id="login-ruby" class="login-btn">我是 Ruby</button>
+            </div>
+        </div>
+
+        <div id="main-screen" class="screen">
+            <header>
+                <h1>FitQuest</h1>
+                <div class="user-info">
+                    <span id="current-user"></span>
+                    <span id="total-points">0 點</span>
+                </div>
+            </header>
+
+            <nav>
+                <button id="nav-exercise" class="nav-btn active">運動</button>
+                <button id="nav-bonus" class="nav-btn">Bonus</button>
+                <button id="nav-rewards" class="nav-btn">獎勵</button>
+                <button id="nav-stats" class="nav-btn">統計</button>
+            </nav>
+
+            <div id="exercise-section" class="section active">
+                <div class="card">
+                    <h2>運動計時</h2>
+                    <div id="exercise-status">
+                        <div id="not-exercising">
+                            <button id="start-exercise" class="primary-btn">開始運動</button>
+                        </div>
+                        <div id="exercising" class="hidden">
+                            <div class="timer">
+                                <span id="exercise-time">00:00:00</span>
+                            </div>
+                            <button id="end-exercise" class="danger-btn">結束運動</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>最近運動記錄</h2>
+                    <div id="recent-exercises" class="record-list">
+                        <!-- 記錄將在這裡動態生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="bonus-section" class="section">
+                <div class="card">
+                    <h2>Bonus 項目</h2>
+                    <div id="bonus-items">
+                        <!-- Bonus項目將在這裡動態生成 -->
+                    </div>
+                    <div class="add-item">
+                        <h3>新增 Bonus 項目</h3>
+                        <div class="form-group">
+                            <label for="bonus-name">項目名稱</label>
+                            <input type="text" id="bonus-name" placeholder="例：喝水">
+                        </div>
+                        <div class="form-group">
+                            <label for="bonus-unit">單位描述</label>
+                            <input type="text" id="bonus-unit" placeholder="例：500cc">
+                        </div>
+                        <div class="form-group">
+                            <label for="bonus-points">每單位點數</label>
+                            <input type="number" id="bonus-points" min="1" value="1">
+                        </div>
+                        <button id="add-bonus" class="primary-btn">新增項目</button>
+                    </div>
+                    <div class="record-bonus">
+                        <h3>記錄完成項目</h3>
+                        <div class="form-group">
+                            <label for="bonus-select">選擇項目</label>
+                            <select id="bonus-select">
+                                <option value="">-- 請選擇 --</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bonus-quantity">完成單位數</label>
+                            <input type="number" id="bonus-quantity" min="1" value="1">
+                        </div>
+                        <button id="record-bonus" class="primary-btn">記錄完成</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>最近 Bonus 記錄</h2>
+                    <div id="recent-bonus" class="record-list">
+                        <!-- 記錄將在這裡動態生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="rewards-section" class="section">
+                <div class="card">
+                    <h2>獎勵兌換</h2>
+                    <div id="rewards-list">
+                        <!-- 獎勵將在這裡動態生成 -->
+                    </div>
+                    <div class="add-reward">
+                        <h3>新增獎勵</h3>
+                        <div class="form-group">
+                            <label for="reward-name">獎勵名稱</label>
+                            <input type="text" id="reward-name" placeholder="例：看電影">
+                        </div>
+                        <div class="form-group">
+                            <label for="reward-points">所需點數</label>
+                            <input type="number" id="reward-points" min="1" value="10">
+                        </div>
+                        <button id="add-reward" class="primary-btn">新增獎勵</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>兌換記錄</h2>
+                    <div id="reward-history" class="record-list">
+                        <!-- 記錄將在這裡動態生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="stats-section" class="section">
+                <div class="card">
+                    <h2>個人統計</h2>
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <span class="stat-label">本週運動時間</span>
+                            <span id="week-exercise-time" class="stat-value">0 分鐘</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">本週獲得點數</span>
+                            <span id="week-points" class="stat-value">0 點</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">總運動次數</span>
+                            <span id="total-exercises" class="stat-value">0 次</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h2>雙人總覽</h2>
+                    <div class="comparison">
+                        <div class="user-column">
+                            <h3>Joel</h3>
+                            <div class="stat-item">
+                                <span class="stat-label">總點數</span>
+                                <span id="joel-total-points" class="stat-value">0 點</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">運動次數</span>
+                                <span id="joel-exercise-count" class="stat-value">0 次</span>
+                            </div>
+                        </div>
+                        <div class="user-column">
+                            <h3>Ruby</h3>
+                            <div class="stat-item">
+                                <span class="stat-label">總點數</span>
+                                <span id="ruby-total-points" class="stat-value">0 點</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">運動次數</span>
+                                <span id="ruby-exercise-count" class="stat-value">0 次</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html> 
