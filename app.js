@@ -1,5 +1,5 @@
 // Google Apps Script Web App URL
-const API_URL = 'https://script.google.com/macros/s/AKfycbx55h8i64a0TIv8wZ9zG6fvXTF8VQarltUtx67zcCM/dev';
+const API_URL = 'https://us-central1-fitquest-c77e4.cloudfunctions.net/helloWorld';
 
 // 全局變量
 let currentUser = null;
