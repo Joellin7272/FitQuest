@@ -1,5 +1,5 @@
 // Google Apps Script Web App URL
-const API_URL = 'https://script.google.com/macros/s/AKfycbyn_wtulVI9RFOFV1MzdZrns8dacntzJHX6QgAKncHnO6hwxFMm9EnQ6lxRfnkkv1Ob/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxJwFNGmFtTJaCdFWVn9LMtkCFUvBtgAXayo_dFRVuQa03ipfaL6rcc40eJrfkd0Alu/exec';
 
 // 全局變量
 let currentUser = null;
