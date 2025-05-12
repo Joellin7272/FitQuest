@@ -1,0 +1,36 @@
+# Git 系統檔案
+.git/
+
+# 編輯器和 IDE 設定檔
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# 作業系統產生的檔案
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node.js 相關
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# 環境設定檔
+.env
+.env.local
+.env.*.local
+
+# 暫存檔案
+*.log
+*.tmp
+*.temp
+*~
+
+# 編譯產生的檔案
+dist/
+build/
+*.min.js
+*.min.css 

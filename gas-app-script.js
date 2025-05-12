@@ -3,9 +3,85 @@
 // 执行用户身份: 以部署者身份
 // 访问权限: 允许匿名访问 (任何人)
 
+// 处理 GET 请求
+function doGet(e) {
+  init();  // 初始化数据表
+  return handleRequest(e);
+}
+
+// 处理 POST 请求
+function doPost(e) {
+  init();  // 初始化数据表
+  return handleRequest(e);
+}
+
+// 统一处理请求
+function handleRequest(e) {
+  try {
+    const data = e.postData ? JSON.parse(e.postData.contents) : (e.parameter || {});
+    const action = data.action;
+    
+    let result;
+    
+    // 根据请求的动作执行相应的处理函数
+    switch (action) {
+      case 'getUserData':
+        result = getUserData(data.user);
+        break;
+      case 'getOngoingExercise':
+        result = getOngoingExercise(data.user);
+        break;
+      case 'startExercise':
+        result = startExercise(data.user, data.startTime);
+        break;
+      case 'endExercise':
+        result = endExercise(data.user, data.startTime, data.endTime, data.duration);
+        break;
+      case 'getBonusItems':
+        result = getBonusItems();
+        break;
+      case 'addBonusItem':
+        result = addBonusItem(data.name, data.unit, data.points);
+        break;
+      case 'recordBonus':
+        result = recordBonus(data.user, data.bonusId, data.quantity, data.timestamp);
+        break;
+      case 'getExercises':
+        result = getExercises(data.user);
+        break;
+      case 'getBonusRecords':
+        result = getBonusRecords(data.user);
+        break;
+      case 'getRewards':
+        result = getRewards();
+        break;
+      case 'addReward':
+        result = addReward(data.name, data.points);
+        break;
+      case 'redeemReward':
+        result = redeemReward(data.user, data.rewardId, data.rewardName, data.points, data.timestamp);
+        break;
+      case 'getRewardHistory':
+        result = getRewardHistory();
+        break;
+      case 'getStats':
+        result = getStats();
+        break;
+      default:
+        result = { error: '未知的操作' };
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify(result))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({ error: error.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
 // 打开或创建电子表格
-const SPREADSHEET_ID = ''; // 在这里填入您的Google Sheets ID
-const ss = SpreadsheetApp.openById(SPREADSHEET_ID) || SpreadsheetApp.create('FitQuest 雙人挑戰賽');
+const SPREADSHEET_ID = '13K-5InWvSNpEmIBl4VhPpLOR7NB7bGlnu4psKcagsFk';
+const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
 
 // 数据表格
 let usersSheet;
@@ -78,72 +154,6 @@ function createRewardHistorySheet() {
   const sheet = ss.insertSheet('RewardHistory');
   sheet.appendRow(['id', 'user', 'rewardId', 'rewardName', 'points', 'timestamp']);
   return sheet;
-}
-
-// Web应用程序入口点
-function doPost(e) {
-  init();
-  
-  try {
-    const data = JSON.parse(e.postData.contents);
-    const action = data.action;
-    
-    let result;
-    
-    // 根据请求的动作执行相应的处理函数
-    switch (action) {
-      case 'getUserData':
-        result = getUserData(data.user);
-        break;
-      case 'getOngoingExercise':
-        result = getOngoingExercise(data.user);
-        break;
-      case 'startExercise':
-        result = startExercise(data.user, data.startTime);
-        break;
-      case 'endExercise':
-        result = endExercise(data.user, data.startTime, data.endTime, data.duration);
-        break;
-      case 'getBonusItems':
-        result = getBonusItems();
-        break;
-      case 'addBonusItem':
-        result = addBonusItem(data.name, data.unit, data.points);
-        break;
-      case 'recordBonus':
-        result = recordBonus(data.user, data.bonusId, data.quantity, data.timestamp);
-        break;
-      case 'getExercises':
-        result = getExercises(data.user);
-        break;
-      case 'getBonusRecords':
-        result = getBonusRecords(data.user);
-        break;
-      case 'getRewards':
-        result = getRewards();
-        break;
-      case 'addReward':
-        result = addReward(data.name, data.points);
-        break;
-      case 'redeemReward':
-        result = redeemReward(data.user, data.rewardId, data.rewardName, data.points, data.timestamp);
-        break;
-      case 'getRewardHistory':
-        result = getRewardHistory();
-        break;
-      case 'getStats':
-        result = getStats();
-        break;
-      default:
-        result = { error: '未知的操作' };
-    }
-    
-    return ContentService.createTextOutput(JSON.stringify(result))
-      .setMimeType(ContentService.MimeType.JSON);
-  } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({ error: error.message }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
 }
 
 // 获取用户数据
