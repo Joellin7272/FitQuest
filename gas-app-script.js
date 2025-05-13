@@ -6,13 +6,31 @@
 // 处理 GET 请求
 function doGet(e) {
   init();  // 初始化数据表
-  return handleRequest(e);
+  
+  // 允许 CORS
+  return addCorsHeaders(handleRequest(e));
 }
 
 // 处理 POST 请求
 function doPost(e) {
   init();  // 初始化数据表
-  return handleRequest(e);
+  
+  // 允许 CORS
+  return addCorsHeaders(handleRequest(e));
+}
+
+// 添加 CORS 头
+function addCorsHeaders(response) {
+  if (typeof response === 'undefined') {
+    response = ContentService.createTextOutput(JSON.stringify({error: '未知错误'}));
+  }
+  
+  // 添加 CORS 頭信息
+  return response
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeader('Access-Control-Allow-Origin', '*')
+    .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    .setHeader('Access-Control-Allow-Headers', 'Content-Type');
 }
 
 // 统一处理请求
@@ -71,11 +89,10 @@ function handleRequest(e) {
         result = { error: '未知的操作' };
     }
     
-    return ContentService.createTextOutput(JSON.stringify(result))
-      .setMimeType(ContentService.MimeType.JSON);
+    // 只返回結果，不設置 MIME 類型，讓 addCorsHeaders 處理
+    return ContentService.createTextOutput(JSON.stringify(result));
   } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({ error: error.message }))
-      .setMimeType(ContentService.MimeType.JSON);
+    return ContentService.createTextOutput(JSON.stringify({ error: error.message }));
   }
 }
 
@@ -158,20 +175,44 @@ function createRewardHistorySheet() {
 
 // 获取用户数据
 function getUserData(user) {
-  const data = {};
-  const userRows = usersSheet.getDataRange().getValues();
-  
-  // 去掉标题行
-  userRows.shift();
-  
-  userRows.forEach(row => {
-    data[row[0]] = {
-      points: row[1],
-      exerciseCount: countExercises(row[0])
+  try {
+    const data = {};
+    const userRows = usersSheet.getDataRange().getValues();
+    
+    // 去掉标题行
+    userRows.shift();
+    
+    // 确保至少有joel和ruby两个用户
+    let hasJoel = false;
+    let hasRuby = false;
+    
+    userRows.forEach(row => {
+      if (row[0] === 'joel') hasJoel = true;
+      if (row[0] === 'ruby') hasRuby = true;
+      
+      data[row[0]] = {
+        points: parseInt(row[1]) || 0,
+        exerciseCount: countExercises(row[0])
+      };
+    });
+    
+    // 如果缺少用户，添加默认值
+    if (!hasJoel) {
+      data['joel'] = { points: 0, exerciseCount: 0 };
+    }
+    if (!hasRuby) {
+      data['ruby'] = { points: 0, exerciseCount: 0 };
+    }
+    
+    return data;
+  } catch (error) {
+    Logger.log('getUserData 錯誤: ' + error.message);
+    // 返回兩個用戶的默認數據
+    return {
+      'joel': { points: 0, exerciseCount: 0 },
+      'ruby': { points: 0, exerciseCount: 0 }
     };
-  });
-  
-  return data;
+  }
 }
 
 // 获取正在进行的运动

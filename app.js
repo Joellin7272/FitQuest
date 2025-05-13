@@ -1,5 +1,6 @@
 // Google Apps Script Web App URL
-const API_URL = 'https://us-central1-fitquest-c77e4.cloudfunctions.net/helloWorld';
+// 注意：部署前請將此 URL 更新為您的 Google Apps Script 網頁應用程式 URL
+const API_URL = 'https://script.google.com/macros/s/AKfycbyfLKpkkCj5f8-hnAg2X6U6fQX4zSvHjsHGjfaGAOZ3w924gERTjbEkNbQKub6gGbR-/exec';
 
 // 全局變量
 let currentUser = null;
@@ -74,8 +75,17 @@ function login(username) {
     // 獲取用戶資料
     fetchData('getUserData', { user: currentUser })
         .then(data => {
-            if (data) {
-                userData = data;
+            console.log('收到的用戶數據:', data); // 添加日誌記錄
+            
+            if (data && typeof data === 'object') {
+                // 確保數據格式正確
+                if (!data[currentUser]) {
+                    console.error('後端返回的數據中沒有當前用戶的數據:', data);
+                    userData[currentUser] = { points: 0, exerciseCount: 0 };
+                } else {
+                    userData = data;
+                }
+                
                 currentUserElement.textContent = username;
                 updatePointsDisplay();
                 
@@ -103,6 +113,9 @@ function login(username) {
                 
                 // 檢查是否有進行中的運動
                 checkOngoingExercise();
+            } else {
+                console.error('後端返回的數據格式不正確:', data);
+                showToast('登入失敗，後端返回的數據格式不正確');
             }
             hideLoading();
         })
@@ -657,10 +670,20 @@ function updateStats() {
 
 // 更新點數顯示
 function updatePointsDisplay(points) {
+    if (!currentUser || !userData[currentUser]) {
+        console.error('用戶數據不存在:', currentUser, userData);
+        return;
+    }
+    
     if (points !== undefined) {
         userData[currentUser].points = points;
     }
-    totalPointsElement.textContent = `${userData[currentUser].points || 0} 點`;
+    
+    if (userData[currentUser].points !== undefined) {
+        totalPointsElement.textContent = `${userData[currentUser].points} 點`;
+    } else {
+        totalPointsElement.textContent = `0 點`;
+    }
 }
 
 // 切換頁面區塊
@@ -685,6 +708,10 @@ function switchSection(sectionName) {
 // API 請求函數
 async function fetchData(action, params) {
     try {
+        // 設置請求超時
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10秒超時
+        
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
@@ -694,14 +721,28 @@ async function fetchData(action, params) {
                 action: action,
                 ...params
             }),
+            signal: controller.signal
         });
+        
+        clearTimeout(timeoutId); // 清除超時
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        return await response.json();
+        const data = await response.json();
+        console.log(`API 回應 (${action}):`, data); // 添加日誌記錄
+        
+        if (data && data.error) {
+            throw new Error(data.error);
+        }
+        
+        return data;
     } catch (error) {
+        if (error.name === 'AbortError') {
+            console.error('API 請求超時:', action);
+            throw new Error('請求超時，請檢查網絡連接');
+        }
         console.error('API 請求失敗:', error);
         throw error;
     }
