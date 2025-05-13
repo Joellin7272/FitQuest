@@ -1,5 +1,6 @@
 // Google Apps Script Web App URL
-const API_URL = 'https://script.google.com/macros/s/AKfycbxJwFNGmFtTJaCdFWVn9LMtkCFUvBtgAXayo_dFRVuQa03ipfaL6rcc40eJrfkd0Alu/exec';
+// 注意：部署前請將此 URL 更新為您的 Google Apps Script 網頁應用程式 URL
+const API_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
 
 // 全局變量
 let currentUser = null;
