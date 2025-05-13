@@ -98,7 +98,7 @@ function handleRequest(e) {
 
 // 打开或创建电子表格
 // 注意：請將此 ID 更新為您自己創建的 Google Sheets 檔案 ID
-const SPREADSHEET_ID = '13K-5InWvSNpEmIBl4VhPpLOR7NB7bGlnu4psKcagsFk';
+const SPREADSHEET_ID = '16RBFjp4O1rYiVb8PmqWMEevq87kHe94Z5ETeNZOmJbQ';
 const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
 
 // 数据表格

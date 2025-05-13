@@ -225,121 +225,138 @@ nav {
 }
 
 .record-item {
-    padding: 0.8rem;
-    border-bottom: 1px solid var(--border-color);
+    background-color: var(--primary-light);
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
 }
 
 .record-item:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
 }
 
 .record-title {
     font-weight: 500;
+    color: var(--primary-color);
 }
 
 .record-detail {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-light);
     display: flex;
     justify-content: space-between;
-    margin-top: 0.3rem;
 }
 
 /* Bonus 項目 */
 .bonus-item {
+    background-color: var(--primary-light);
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.8rem;
-    border-bottom: 1px solid var(--border-color);
+    flex-direction: column;
+    gap: 0.3rem;
 }
 
 .bonus-item:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
 }
 
 .bonus-info span {
-    display: block;
+    display: inline-block;
+    margin-right: 1rem;
 }
 
 .bonus-name {
     font-weight: 500;
+    color: var(--primary-color);
 }
 
 .bonus-detail {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-light);
 }
 
 /* 獎勵項目 */
 .reward-item {
+    background-color: var(--primary-light);
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.8rem;
-    border-bottom: 1px solid var(--border-color);
+    flex-direction: column;
+    gap: 0.3rem;
 }
 
 .reward-item:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
 }
 
 .reward-info span {
-    display: block;
+    display: inline-block;
+    margin-right: 1rem;
 }
 
 .reward-name {
     font-weight: 500;
+    color: var(--primary-color);
 }
 
 .reward-points {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-light);
 }
 
-/* 統計頁面 */
+/* 統計區塊 */
 .stats-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .stat-item {
-    background-color: var(--primary-light);
-    padding: 1rem;
+    flex: 1 1 120px;
+    background-color: var(--card-color);
     border-radius: 8px;
+    padding: 1rem;
     text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
 .stat-label {
-    display: block;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-light);
-    margin-bottom: 0.3rem;
 }
 
 .stat-value {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: var(--primary-color);
 }
 
 .comparison {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 1rem;
+    margin-top: 1rem;
 }
 
 .user-column {
+    flex: 1;
+    background-color: var(--primary-light);
+    border-radius: 8px;
+    padding: 1rem;
     text-align: center;
 }
 
 .user-column h3 {
-    margin-bottom: 1rem;
     color: var(--primary-color);
+    margin-bottom: 0.5rem;
 }
 
-/* Toast 通知 */
 .toast {
     position: fixed;
     bottom: 2rem;

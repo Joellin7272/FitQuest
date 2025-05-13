@@ -1,6 +1,10 @@
 // Google Apps Script Web App URL
 // 注意：部署前請將此 URL 更新為您的 Google Apps Script 網頁應用程式 URL
+<<<<<<< HEAD
 const API_URL = 'https://script.google.com/macros/s/AKfycbx2YkKuSCNXcAkkdfsdhwqXG83FI1uF_UDK_VhA1mV3Vv6EX6pMNT49c8CaijLgUipP/exec';
+=======
+const API_URL = 'https://script.google.com/macros/s/AKfycbyfLKpkkCj5f8-hnAg2X6U6fQX4zSvHjsHGjfaGAOZ3w924gERTjbEkNbQKub6gGbR-/exec';
+>>>>>>> b46aadf03a087035bf5a5c7b3fc7da23037a6ba0
 
 // 全局變量
 let currentUser = null;
@@ -81,6 +85,7 @@ function login(username) {
             if (data && typeof data === 'object') {
                 // 確保數據格式正確
                 if (!data[currentUser]) {
+<<<<<<< HEAD
                     console.warn('後端返回的數據中沒有當前用戶的數據:', data);
                     // 創建空的用戶數據
                     data[currentUser] = { points: 0, exerciseCount: 0 };
@@ -118,6 +123,41 @@ function login(username) {
                 }).catch(error => {
                     console.error('獲取數據時發生錯誤:', error);
                 });
+=======
+                    console.error('後端返回的數據中沒有當前用戶的數據:', data);
+                    userData[currentUser] = { points: 0, exerciseCount: 0 };
+                } else {
+                    userData = data;
+                }
+                
+                currentUserElement.textContent = username;
+                updatePointsDisplay();
+                
+                // 獲取並顯示Bonus項目
+                fetchBonusItems();
+                
+                // 獲取並顯示獎勵項目
+                fetchRewards();
+                
+                // 獲取並顯示運動記錄
+                fetchExercises();
+                
+                // 獲取並顯示Bonus記錄
+                fetchBonusRecords();
+                
+                // 獲取並顯示兌換記錄
+                fetchRewardHistory();
+                
+                // 更新統計數據
+                updateStats();
+                
+                // 顯示主畫面
+                loginScreen.classList.remove('active');
+                mainScreen.classList.add('active');
+                
+                // 檢查是否有進行中的運動
+                checkOngoingExercise();
+>>>>>>> b46aadf03a087035bf5a5c7b3fc7da23037a6ba0
             } else {
                 console.error('後端返回的數據格式不正確:', data);
                 showToast('登入失敗，後端返回的數據格式不正確');
@@ -675,6 +715,7 @@ function updateStats() {
 
 // 更新點數顯示
 function updatePointsDisplay(points) {
+<<<<<<< HEAD
     console.log('updatePointsDisplay 被調用，當前用戶:', currentUser);
     console.log('當前用戶數據:', userData);
     
@@ -696,6 +737,13 @@ function updatePointsDisplay(points) {
         userData[currentUser] = { points: 0, exerciseCount: 0 };
     }
     
+=======
+    if (!currentUser || !userData[currentUser]) {
+        console.error('用戶數據不存在:', currentUser, userData);
+        return;
+    }
+    
+>>>>>>> b46aadf03a087035bf5a5c7b3fc7da23037a6ba0
     if (points !== undefined) {
         userData[currentUser].points = points;
         console.log(`已更新 ${currentUser} 的點數為 ${points}`);
@@ -706,6 +754,15 @@ function updatePointsDisplay(points) {
     } else {
         totalPointsElement.textContent = `0 點`;
     }
+<<<<<<< HEAD
+=======
+    
+    if (userData[currentUser].points !== undefined) {
+        totalPointsElement.textContent = `${userData[currentUser].points} 點`;
+    } else {
+        totalPointsElement.textContent = `0 點`;
+    }
+>>>>>>> b46aadf03a087035bf5a5c7b3fc7da23037a6ba0
 }
 
 // 切換頁面區塊
@@ -733,7 +790,11 @@ async function fetchData(action, params) {
     try {
         // 設置請求超時
         const controller = new AbortController();
+<<<<<<< HEAD
         const timeoutId = setTimeout(() => controller.abort(), 15000); // 15秒超時
+=======
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10秒超時
+>>>>>>> b46aadf03a087035bf5a5c7b3fc7da23037a6ba0
         
         const response = await fetch(API_URL, {
             method: 'POST',
@@ -744,14 +805,21 @@ async function fetchData(action, params) {
                 action: action,
                 ...params
             }),
+<<<<<<< HEAD
             signal: controller.signal,
             mode: 'cors' // 明確設置 CORS 模式
+=======
+            signal: controller.signal
+>>>>>>> b46aadf03a087035bf5a5c7b3fc7da23037a6ba0
         });
         
         clearTimeout(timeoutId); // 清除超時
         
+<<<<<<< HEAD
         console.log(`API 回應狀態 (${action}):`, response.status, response.statusText);
         
+=======
+>>>>>>> b46aadf03a087035bf5a5c7b3fc7da23037a6ba0
         if (!response.ok) {
             const errorText = await response.text();
             console.error(`HTTP 錯誤 (${response.status}):`, errorText);
@@ -759,7 +827,11 @@ async function fetchData(action, params) {
         }
         
         const data = await response.json();
+<<<<<<< HEAD
         console.log(`API 回應數據 (${action}):`, data); // 添加日誌記錄
+=======
+        console.log(`API 回應 (${action}):`, data); // 添加日誌記錄
+>>>>>>> b46aadf03a087035bf5a5c7b3fc7da23037a6ba0
         
         if (data && data.error) {
             throw new Error(data.error);
@@ -770,11 +842,16 @@ async function fetchData(action, params) {
         if (error.name === 'AbortError') {
             console.error('API 請求超時:', action);
             throw new Error('請求超時，請檢查網絡連接');
+<<<<<<< HEAD
         } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
             console.error('網絡錯誤 (可能是 CORS 問題):', error);
             throw new Error('網絡錯誤: 可能是跨域 (CORS) 問題，請確認 API URL 設置正確');
         }
         console.error(`API 請求失敗 (${action}):`, error);
+=======
+        }
+        console.error('API 請求失敗:', error);
+>>>>>>> b46aadf03a087035bf5a5c7b3fc7da23037a6ba0
         throw error;
     }
 }
